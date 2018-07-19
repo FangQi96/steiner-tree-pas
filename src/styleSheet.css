@@ -1,0 +1,29 @@
+graph {
+	 fill-color: grey;
+}
+ node {
+     fill-color: black;
+     size-mode: dyn-size;
+     size: 5px;
+}
+ node.terminal {
+     shape: box;
+	 size: 10px, 10px;
+	 stroke-mode: plain;
+	 stroke-color: white;
+	 stroke-width: 1px;
+}
+node.steiner {
+	fill-color: white;
+}
+edge {
+	 text-offset: -5;
+	 fill-color: black;
+}
+ edge.approxEdge {
+     fill-color: red;
+}
+ edge.exactEdge {
+     fill-color: purple;
+}
+ 
