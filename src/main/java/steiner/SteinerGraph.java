@@ -30,20 +30,20 @@ public class SteinerGraph {
 		}
 	}
 
+	/**
+	 * Constructs the SteinerGraph as a deep copy of its parent
+	 * @param parent parent to be deep copied
+	 */
 	public SteinerGraph(SteinerGraph parent){
 		edgeCount = parent.edgeCount;
 		vertexCount = parent.vertexCount;
 		inputPath = parent.inputPath;
 
 		terminals = new HashSet<>();
-		for(Integer i : parent.terminals) {
-			terminals.add(i);
-		}
+		terminals.addAll(parent.terminals);
 
 		steinerTreeEdges = new HashSet<>();
-		for(Integer i : parent.steinerTreeEdges) {
-			steinerTreeEdges.add(i);
-		}
+		steinerTreeEdges.addAll(parent.steinerTreeEdges);
 
 		IDToEdge = new HashMap<>();
 		for(Map.Entry<Integer, SteinerGraphEdge> entry : parent.IDToEdge.entrySet()) {
@@ -125,8 +125,20 @@ public class SteinerGraph {
 	}
 
 	/**
+	 * Removes a vertex
+	 * @param v vertex to be removed
+	 */
+	public void removeVertex(Integer v){
+		while(!vertices.get(v).neighbours.isEmpty()){
+			removeEdge(v, new ArrayList<>(vertices.get(v).neighbours).get(0));
+		}
+		vertices.remove(v);
+		terminals.remove(v);
+	}
+
+	/**
 	 * Sets a vertex to be terminal
-	 * @param t specified vertex
+	 * @param t vertex to be set as terminal
 	 */
 	public void setTerminal(int t) {
 		terminals.add(t);
@@ -138,7 +150,7 @@ public class SteinerGraph {
 
 	/**
 	 * Sets a vertex to be non-terminal
-	 * @param t specified vertex
+	 * @param t vertex to be set as non-terminal
 	 */
 	public void unTerminal(int t) {
 		if(vertices.get(t).isTerminal) {
@@ -219,9 +231,7 @@ public class SteinerGraph {
 			tempID.addAll(edgeOne.getID());
 			tempID.addAll(edgeTwo.getID());
 			addEdge(neighbourOne, neighbourTwo, edgeOne.getWeight() + edgeTwo.getWeight(), tempID);
-			removeEdge(middle, neighbourOne);
-			removeEdge(middle, neighbourTwo);
-			vertices.remove(middle);
+			removeVertex(middle);
 		}
 	}
 
@@ -243,7 +253,7 @@ public class SteinerGraph {
 			}
 		}
 		for(Integer i : steinerIsolated) {
-			vertices.remove(i);
+			removeVertex(i);
 		}
 	}
 

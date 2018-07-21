@@ -83,17 +83,10 @@ public class Kernel {
 			}
 		}
 
-		for(Integer starvertex : starvertices) {
-			List<Integer> neighbourhood = new ArrayList<Integer>(steinerGraph.vertices.get(starvertex).neighbours);
-			while(!neighbourhood.isEmpty()) {
-				steinerGraph.removeEdge(neighbourhood.get(0), starvertex);
-				neighbourhood = new ArrayList<Integer>(steinerGraph.vertices.get(starvertex).neighbours);
-			}
+		for(Integer starvertex : starvertices){
+			steinerGraph.removeVertex(starvertex);
 		}
-		for(Integer starvertex : starvertices) {
-			steinerGraph.vertices.remove(starvertex);
-			steinerGraph.terminals.remove(starvertex);
-		}
+
 		for(Integer v : outsideneighbours) {
 			computeRatio(v);
 		}
