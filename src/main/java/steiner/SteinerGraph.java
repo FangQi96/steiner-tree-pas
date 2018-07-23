@@ -3,7 +3,7 @@ package steiner;
 import java.util.*;
 
 /**
- * A steinerGraph data structure capable of working with Steiner trees
+ * A Graph data structure that can store properties of a Steiner Tree
  * @author Kemeny Tamas
  */
 public class SteinerGraph {
@@ -24,10 +24,7 @@ public class SteinerGraph {
 		edges = new HashMap<>();
 		steinerTreeEdges = new HashSet<>();
 		vertices = new HashMap<>();
-		for(int i = 0; i < vertexCount; i++) {
-			terminals = new HashSet<>();
-			vertices.put(i, new SteinerGraphVertex(i));
-		}
+        terminals = new HashSet<>();
 	}
 
 	/**
@@ -62,14 +59,20 @@ public class SteinerGraph {
 	}
 
 	/**
-	 * Defines a new edge in the steinerGraph. This method assume correct input (no loops, no multi-edges)
-	 * and is used for the construction of the initial steinerGraph. The edge is assigned a unique identifier.
+	 * Defines a new edge in the graph. This method assume correct input (no loops, no multi-edges)
+	 * and is used for the construction of the initial graph. The edge is assigned a unique identifier.
 	 * @param v1 first endpoint
 	 * @param v2 second endpoint
 	 * @param weight weight of the edge
 	 */
 	public void defineEdge(Integer v1, Integer v2, Integer weight) {
 		SteinerGraphEdge e = new SteinerGraphEdge(edgeCount, v1, v2, weight);
+		if (!vertices.containsKey(v1)){
+		    vertices.put(v1, new SteinerGraphVertex(v1));
+        }
+        if (!vertices.containsKey(v2)){
+            vertices.put(v2, new SteinerGraphVertex(v2));
+        }
 		vertices.get(v1).neighbours.add(v2);
 		vertices.get(v2).neighbours.add(v1);
 		edges.put(new SortedPair(v1, v2), e);
@@ -78,7 +81,7 @@ public class SteinerGraph {
 	}
 
 	/**
-	 * Adds an edge to the steinerGraph. This method is used for modifications of a steinerGraph already read from input.
+	 * Adds an edge to the graph. This method is used for modifications of a graph already read from input.
 	 * If there is already an existing edge, the lighter one is kept. Loops are not added.
 	 * The edge is assigned a new identifier.
 	 * @param v1 first endpoint
@@ -217,7 +220,7 @@ public class SteinerGraph {
 	/**
 	 * Vertices with degree 2 may be seen as a subdivision of a single edge
 	 */
-	public void undoSubdivisions() {
+	private void undoSubdivisions() {
 		Stack<Integer> stack = new Stack<Integer>();
 		stack.addAll(vertices.keySet());
 		while(!stack.isEmpty()) {
@@ -238,7 +241,7 @@ public class SteinerGraph {
 	/**
 	 * Removes all Steiner vertices that are isolated
 	 */
-	public void removeIsolated() {
+    private void removeIsolated() {
 		List<Integer> steinerIsolated = new ArrayList<>();
 		for(SteinerGraphVertex v : vertices.values()) {
 			if (v.neighbours.size() == 0) {
@@ -260,7 +263,7 @@ public class SteinerGraph {
 	/**
 	 * Removes all Steiner vertices that are leaves
 	 */
-	public void removeLeaves() {
+    private void removeLeaves() {
 		Stack<Integer> stack = new Stack<Integer>();
 		stack.addAll(vertices.keySet());
 		while(!stack.isEmpty()) {

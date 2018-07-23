@@ -7,25 +7,46 @@ node {
      size: 5px;
 	 stroke-mode: plain;
 	 stroke-color: white;
-	 stroke-width: 1px;
+	 stroke-width: 2px;
 }
 node.terminal {
+	 fill-color: white;
      shape: box;
 	 size: 10px, 10px;
+	 stroke-mode: plain;
+	 stroke-color: black;
+	 stroke-width: 3px;
+	 z-index: 5;
 }
 node.steiner {
-	fill-color: white;
+	 shape: diamond;
+	 size: 8px;
+	 fill-color: blue;
+	 z-index: 5;
 }
 edge {
 	 text-background-mode: plain;
-	 fill-color: black;
+	 text-padding: 1px;
+	 text-alignment: along;
+	 fill-color: #AAA;
+	 text-visibility-mode: under-zoom;
+	 text-visibility: 1;
+	 text-color: #999;
 }
 edge.approxEdge {
+	 text-color: black;
+	 shape: blob;
      fill-color: red;
-     size: 4px;
+     size: 5px;
+	 text-style: bold;
+	 z-index: 4;
 }
 edge.exactEdge {
+	 text-color: black;
+	 shape: blob;
      fill-color: darkgreen;
-     size: 4px;
+     size: 5px;
+	 text-style: bold;
+	 z-index: 4;
 }
  

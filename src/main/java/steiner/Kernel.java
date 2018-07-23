@@ -11,13 +11,15 @@ public class Kernel {
 	protected SteinerGraph steinerGraph;
 	protected List<SteinerGraph> saves;
 	private Map<Integer, List<Double>> ratios;
+	protected StringBuilder contractionInfo;
 	protected Kernel(SteinerGraph steinerGraph) {
+	    contractionInfo = new StringBuilder();
 		this.steinerGraph = new SteinerGraph(steinerGraph);
 		saves = new ArrayList<>();
 		saves.add(new SteinerGraph(steinerGraph));
-		ratios = new HashMap<Integer, List<Double>>();
+		ratios = new HashMap<>();
 		for(Integer i : steinerGraph.vertices.keySet()) {
-			ratios.put(i, new ArrayList<Double>());
+			ratios.put(i, new ArrayList<>());
 		}
 	}
 
@@ -37,7 +39,12 @@ public class Kernel {
 			}
 		}
 		if (id != null) {
-//			System.out.println("Star contracted " + min.getSecond() + " with center " + id + " into new terminal " + steinerGraph.vertexCount);
+		    contractionInfo.append("Contraction: #" + saves.size());
+		    contractionInfo.append("\nStar edges: ");
+		    for(SteinerGraphEdge e : min.getSecond()){
+		        contractionInfo.append("{" + e.getStart() + "," + e.getEnd() + "} ");
+            }
+            contractionInfo.append("\nStar ratio: " + min.getFirst() + "\nNew Terminal: #" + steinerGraph.vertexCount + "\n\n");
 			contractStar(id, min.getSecond());
 			return true;
 		}
@@ -52,7 +59,7 @@ public class Kernel {
 	private void contractStar(Integer center, List<SteinerGraphEdge> staredges) {
 		steinerGraph.vertices.put(steinerGraph.vertexCount, new SteinerGraphVertex(steinerGraph.vertexCount));
 		steinerGraph.setTerminal(steinerGraph.vertexCount);
-		ratios.put(steinerGraph.vertexCount, new ArrayList<Double>());
+		ratios.put(steinerGraph.vertexCount, new ArrayList<>());
 		Set<Integer> starvertices = new HashSet<Integer>();
 		for(SteinerGraphEdge staredge : staredges) {
 			for(Integer edgeID : staredge.getID()) {
@@ -110,7 +117,7 @@ public class Kernel {
 				star = terminaledges.subList(0, i+1);
 			}
 		}
-		return new Pair<Double, List<SteinerGraphEdge>>(ratio, star);
+		return new Pair<>(ratio, star);
 	}
 
 	/**
@@ -146,4 +153,8 @@ public class Kernel {
 	public List<SteinerGraph> getSnapshots() {
 		return saves;
 	}
+
+	public String getContractionInfos(){
+        return contractionInfo.toString();
+    }
 }

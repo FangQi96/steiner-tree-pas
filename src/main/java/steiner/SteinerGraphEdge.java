@@ -15,7 +15,7 @@ public class SteinerGraphEdge {
     private Integer weight;
 
     public SteinerGraphEdge(int i, int start, int end, int weight) {
-        this.id = new ArrayList<Integer>();
+        this.id = new ArrayList<>();
         this.id.add(i);
         this.start = start;
         this.end = end;
@@ -30,37 +30,15 @@ public class SteinerGraphEdge {
     }
 
     public SteinerGraphEdge(SteinerGraphEdge parent) {
-        start = parent.start.intValue();
-        end = parent.end.intValue();
-        weight = parent.weight.intValue();
-        id = new ArrayList<Integer>();
-        for (Integer i : parent.id) {
-            id.add(i.intValue());
-        }
+        start = parent.start;
+        end = parent.end;
+        weight = parent.weight;
+        id = new ArrayList<>();
+        id.addAll(parent.id);
     }
 
-    public int hashCode() {
-        int hashOne = start != null ? start.hashCode() : 0;
-        int hashTwo = end != null ? end.hashCode() : 0;
-        int hashThree = id != null ? id.hashCode() : 0;
-        int hashFour = weight != null ? weight.hashCode() : 0;
-
-        return (hashOne + hashTwo) * hashThree
-                + (hashOne + hashThree) * hashTwo
-                + (hashTwo + hashThree) * hashOne
-                % hashFour;
-    }
-
-    public boolean equals(Object other) {
-        if (other instanceof SteinerGraphEdge) {
-            SteinerGraphEdge otherEdge = (SteinerGraphEdge) other;
-            return (this.id == otherEdge.id);
-        }
-        return false;
-    }
-
-    public String toString() {
-        return id + "w(" + start + "," + end + ")=" + weight;
+    public String toString(){
+        return "{" + start + "," + end + "}";
     }
 
     public Integer getStart() {

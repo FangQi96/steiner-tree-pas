@@ -24,11 +24,11 @@ public class DreyfusWagner {
 
 		// Make all terminals into leaves
 		Stack<Integer> terminalsToModify = new Stack<Integer>();
-		for(Integer i : steinerGraph.terminals) terminalsToModify.add(i);
+		terminalsToModify.addAll(steinerGraph.terminals);
 		while(!terminalsToModify.isEmpty()) {
 			Integer t = terminalsToModify.pop();
 			if (steinerGraph.vertices.get(t).neighbours.size() == 1){
-				Integer singleNeighbour = new ArrayList<Integer>(steinerGraph.vertices.get(t).neighbours).get(0);
+				Integer singleNeighbour = new ArrayList<>(steinerGraph.vertices.get(t).neighbours).get(0);
 				if(!steinerGraph.vertices.get(singleNeighbour).isTerminal) continue;
 				else {
 					steinerGraph.unTerminal(singleNeighbour);
@@ -149,7 +149,7 @@ public class DreyfusWagner {
 		while(!parents.isEmpty()) {
 			DreyWagCache current = parents.pop();
 			if (current.getParentColumn() == null) {
-				edgeIDs.addAll(path(new ArrayList<Integer>(RowToSubset.get(current.getRow())).get(0),
+				edgeIDs.addAll(path(new ArrayList<>(RowToSubset.get(current.getRow())).get(0),
 						ColumnToSV.get(current.getColumn()), steinerGraph, next));
 			}
 			else {
@@ -160,11 +160,10 @@ public class DreyfusWagner {
 		}
 		steinerEdges = new ArrayList<Integer>(edgeIDs);
 		Collections.sort(steinerEdges);
-		optimalTree = new ReadInput(steinerGraph.inputPath, steinerEdges).getSteinerGraph();
 	}
 	
 	private Set<Integer> path(Integer u, Integer v, SteinerGraph steinerGraph, Integer[][] next){
-		if (next[u][v] == null) return new HashSet<Integer>();
+		if (next[u][v] == null) return new HashSet<>();
 		List<Integer> p = new ArrayList<Integer>();
 		p.add(u);
 		while (!u.equals(v)) {
@@ -222,9 +221,5 @@ public class DreyfusWagner {
 	
 	public List<Integer> getEdges() {
 		return steinerEdges;
-	}
-	
-	public SteinerGraph getOptimalTree() {
-		return optimalTree;
 	}
 }

@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Auxiliary class used to read file in the .gr format and output an instance of the steiner.SteinerGraph class
+ * Auxiliary class used to read file in the .gr format and output an instance of the SteinerGraph class
  * @author Kemeny Tamas
  */
 public class ReadInput {
@@ -29,15 +29,15 @@ public class ReadInput {
 						m = Integer.parseInt(split[1]);
 						break;
 					case("E"):
-						steinerGraph.defineEdge(Integer.parseInt(split[1])-1,
-								Integer.parseInt(split[2])-1,
+						steinerGraph.defineEdge(Integer.parseInt(split[1]),
+								Integer.parseInt(split[2]),
 								Integer.parseInt(split[3]));
 						edgeCount++;
 						vertices.add(Integer.parseInt(split[1]));
 						vertices.add(Integer.parseInt(split[2]));
 						break;
 					case("T"):
-						steinerGraph.setTerminal(Integer.parseInt(split[1])-1);
+						steinerGraph.setTerminal(Integer.parseInt(split[1]));
 						break;
 					default:
 						break;
@@ -81,12 +81,12 @@ public class ReadInput {
 						break;
 					case("E"):
 						if(!filter.contains(counter)) continue;
-						steinerGraph.defineEdge(Integer.parseInt(split[1])-1,
-								Integer.parseInt(split[2])-1,
+						steinerGraph.defineEdge(Integer.parseInt(split[1]),
+								Integer.parseInt(split[2]),
 								Integer.parseInt(split[3]));
 						break;
 					case("T"):
-						steinerGraph.setTerminal(Integer.parseInt(split[1])-1);
+						steinerGraph.setTerminal(Integer.parseInt(split[1]));
 						break;
 					default:
 						break;

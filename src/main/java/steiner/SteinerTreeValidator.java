@@ -58,7 +58,7 @@ public class SteinerTreeValidator {
 		}
 		for(Integer i : steinerGraph.vertices.keySet()) {
 			if (!visited.get(i)) {
-				System.out.println(steinerGraph.inputPath + " Error - Steiner tree is disconnected: steiner.SteinerGraphVertex " + i + " was not visited");
+				System.out.println(steinerGraph.inputPath + " Error - Steiner tree is disconnected: Vertex " + i + " was not visited");
 				return false;
 			}
 		}
