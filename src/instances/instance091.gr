@@ -1,4 +1,4 @@
-SECTION steiner.SteinerGraph
+SECTION Graph
 Nodes 1359
 Edges 2458
 E 1 2 5

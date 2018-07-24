@@ -6,11 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+/**
+ * Confirms Steiner tree validity by running DFS
+ */
 public class SteinerTreeValidator {
 
 	/**
-	 * Checks Steiner tree validity, prints error if it isn't valid, otherwise doesn't print anything
+	 * Checks Steiner tree validity by running DFS on the specified SteinerGraph
+	 * Returns true if the graph is connected, acyclic and contains all terminals
+	 * otherwise prints an error message and returns false
 	 * @return validity of Steiner tree
+	 * @param steinerGraph tree to validate
 	 */
 	public boolean validate(SteinerGraph steinerGraph) {
 		Stack<Integer> stack = new Stack<Integer>();

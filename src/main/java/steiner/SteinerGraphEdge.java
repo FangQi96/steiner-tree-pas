@@ -15,7 +15,7 @@ public class SteinerGraphEdge {
     private Integer weight;
 
     public SteinerGraphEdge(int i, int start, int end, int weight) {
-        this.id = new ArrayList<>();
+        this.id = new ArrayList<Integer>();
         this.id.add(i);
         this.start = start;
         this.end = end;
@@ -37,7 +37,7 @@ public class SteinerGraphEdge {
         id.addAll(parent.id);
     }
 
-    public String toString(){
+    public String toString() {
         return "{" + start + "," + end + "}";
     }
 

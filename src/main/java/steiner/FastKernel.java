@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Reduction method that completes metric closure incrementally
+ */
 public class FastKernel extends Kernel {
 	private Map<Integer, DijkstraCache> dijkstraCache;
 	public FastKernel(SteinerGraph steinerGraph) {

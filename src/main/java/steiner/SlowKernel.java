@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+/**
+ * Reduction method that completes metric closure at once
+ */
 public class SlowKernel extends Kernel {
 
 	public SlowKernel(SteinerGraph steinerGraph) {

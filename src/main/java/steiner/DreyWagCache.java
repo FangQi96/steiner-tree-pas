@@ -1,5 +1,8 @@
 package steiner;
 
+/**
+ * Simple cache data structure used by the Dreyfus Wagner algorithm
+ */
 public class DreyWagCache {
 	private Integer cachedWeight;
 	private Integer row;

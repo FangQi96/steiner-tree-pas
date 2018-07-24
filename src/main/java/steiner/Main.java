@@ -26,9 +26,6 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		String params = "-ui output -in src/instances/instance-test2.gr -output -long";
-		String[] paramlist = params.split(" ");
-
 		String inputPath = null;
 		Boolean out = false;
 		Boolean displayInput = false;
@@ -39,17 +36,18 @@ public class Main {
 		Integer accuracy = null;
 		Boolean continuous = false;
 		Boolean longOut = false;
+		Boolean slowKernel = false;
 
-		for(int i = 0; i < paramlist.length; i++){
+		for(int i = 0; i < args.length; i++){
 			try {
-				switch (paramlist[i]) {
+				switch (args[i]) {
 					case ("-d"):
 					case ("-display"):
                     case ("-ui"):
                     case ("-gui"):
 						i++;
-						if (i < paramlist.length) {
-							switch (paramlist[i]) {
+						if (i < args.length) {
+							switch (args[i]) {
 								case ("i"):
                                 case ("in"):
 								case ("input"):
@@ -69,9 +67,9 @@ public class Main {
 					case ("-in"):
 					case ("-input"):
 						i++;
-						if (i < paramlist.length) {
-							if (paramlist[i].substring(paramlist[i].lastIndexOf('.')).equals(".gr")) {
-								inputPath = paramlist[i];
+						if (i < args.length) {
+							if (args[i].substring(args[i].lastIndexOf('.')).equals(".gr")) {
+								inputPath = args[i];
 							} else i--;
 						}
 						break;
@@ -92,11 +90,15 @@ public class Main {
 					case ("-continuous"):
 						continuous = true;
 						break;
+					case ("-slow"):
+					case ("-slowkernel"):
+						slowKernel = true;
+						break;
 					case ("-a"):
 					case ("-accuracy"):
 						i++;
-						if (i < paramlist.length) {
-							accuracy = Integer.parseInt(paramlist[i]);
+						if (i < args.length) {
+							accuracy = Integer.parseInt(args[i]);
 						}
 						break;
 					case ("-s"):
@@ -104,15 +106,15 @@ public class Main {
 					case ("-steiner"):
 					case ("-steinervertex"):
 						i++;
-						if (i < paramlist.length) {
-							sCutOff = Integer.parseInt(paramlist[i]);
+						if (i < args.length) {
+							sCutOff = Integer.parseInt(args[i]);
 						}
 						break;
 					case ("-t"):
 					case ("-terminal"):
 						i++;
-						if (i < paramlist.length) {
-							tCutOff = Integer.parseInt(paramlist[i]);
+						if (i < args.length) {
+							tCutOff = Integer.parseInt(args[i]);
 						}
 						break;
 				}
@@ -185,12 +187,20 @@ public class Main {
 				}
 				System.out.println();
 			}
-			SteinerGraph processedGraph = new SteinerGraph(inputGraph);
-			processedGraph.preProcess();
+
+			PreProcessor pp = new PreProcessor(new SteinerGraph(inputGraph));
+			pp.run();
+			SteinerGraph processedGraph = pp.getGraph();
 			Integer preProcessSteinerDifference = inputGraph.vertices.size()-processedGraph.vertices.size();
 
 			if (!silent) {
-				System.out.println("Pre-processing removed " + preProcessSteinerDifference + " Steiner vertices\n");
+				System.out.println("Pre-processing removed " + preProcessSteinerDifference + " Steiner vertices");
+				if (longOut){
+				    if (!pp.getDegreeZeroSVs().isEmpty()) System.out.println("Degree 0: " + pp.getDegreeZeroSVs());
+                    if (!pp.getDegreeOneSVs().isEmpty()) System.out.println("Degree 1: " + pp.getDegreeOneSVs());
+                    if (!pp.getDegreeTwoSVs().isEmpty()) System.out.println("Degree 2: " + pp.getDegreeTwoSVs());
+                }
+                System.out.println();
 				for(int i = 0; i < iplen; i++){
 					System.out.print("=");
 				}
@@ -212,19 +222,29 @@ public class Main {
 				}
 				System.out.println();
 			}
+			List<SteinerGraph> saves;
+			String contractionInfo;
+			if (slowKernel){
+				SlowKernel kernel = new SlowKernel(processedGraph);
+				kernel.contract();
+				saves = kernel.getSnapshots();
+				contractionInfo = kernel.getContractionInfos();
+			}
+			else {
+				FastKernel kernel = new FastKernel(processedGraph);
+				kernel.contract();
+				saves = kernel.getSnapshots();
+				contractionInfo = kernel.getContractionInfos();
+			}
 
-			FastKernel kernel = new FastKernel(processedGraph);
-			kernel.contract();
-			List<SteinerGraph> saves = kernel.getSnapshots();
 			if (!silent){
 				System.out.println("Kernel finished after " + (saves.size() - 1) + " contractions\n");
 				if (longOut){
-				    System.out.println(kernel.getContractionInfos());
+				    System.out.println(contractionInfo);
                 }
 			}
 
 			Integer selectedIndex = Integer.MAX_VALUE;
-			Set<Integer> selectedIndices = new HashSet<>();
 			int accuracyRange = 10;
 			if (!continuous) {
 
@@ -364,9 +384,9 @@ public class Main {
                 }
                 System.out.println();
             }
-
+            List<Integer> selectedIndices = new ArrayList<>();
 			if (continuous) {
-				for (int i = 0; i < saves.size(); i++) {
+				for (int i = saves.size()-1; i > -1 ; i--) {
 					selectedIndices.add(i);
 				}
 			}
@@ -404,7 +424,7 @@ public class Main {
                     System.out.println();
 
 					System.out.println("Approximated part weight: w1=" + approxPart);
-					System.out.print("Approximated part edges: ");
+					System.out.print("Approximated edges: ");
                     for(Integer i : approxTree){
                         System.out.print(inputGraph.IDToEdge.get(i) + " ");
                     }
@@ -412,7 +432,7 @@ public class Main {
                     System.out.println();
 
 					System.out.println("Exact part weight: w2=" + exactPart);
-					System.out.print("Exact part edges: ");
+					System.out.print("Exact edges: ");
                     for(Integer i : exactTree){
                         System.out.print(inputGraph.IDToEdge.get(i) + " ");
                     }

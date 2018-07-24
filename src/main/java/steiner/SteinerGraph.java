@@ -13,18 +13,18 @@ public class SteinerGraph {
 	public Map<SortedPair, SteinerGraphEdge> edges;
 	public Set<Integer> terminals;
 	public Set<Integer> steinerTreeEdges;
-	public int edgeCount = 0;
-	public int vertexCount = 0;
+	public Integer vertexCount;
+	public int edgeCount;
 
-	public SteinerGraph(int _n, String path) {
+	public SteinerGraph(String path) {
 		inputPath = path;
-		vertexCount = _n;
-
 		IDToEdge = new HashMap<>();
 		edges = new HashMap<>();
 		steinerTreeEdges = new HashSet<>();
 		vertices = new HashMap<>();
         terminals = new HashSet<>();
+        vertexCount = Integer.MIN_VALUE;
+        edgeCount = 0;
 	}
 
 	/**
@@ -32,6 +32,7 @@ public class SteinerGraph {
 	 * @param parent parent to be deep copied
 	 */
 	public SteinerGraph(SteinerGraph parent){
+
 		edgeCount = parent.edgeCount;
 		vertexCount = parent.vertexCount;
 		inputPath = parent.inputPath;
@@ -69,9 +70,15 @@ public class SteinerGraph {
 		SteinerGraphEdge e = new SteinerGraphEdge(edgeCount, v1, v2, weight);
 		if (!vertices.containsKey(v1)){
 		    vertices.put(v1, new SteinerGraphVertex(v1));
+		    if (v1 >= vertexCount){
+                vertexCount = v1 + 1;
+            }
         }
         if (!vertices.containsKey(v2)){
             vertices.put(v2, new SteinerGraphVertex(v2));
+            if (v2 >= vertexCount){
+                vertexCount = v2 + 1;
+            }
         }
 		vertices.get(v1).neighbours.add(v2);
 		vertices.get(v2).neighbours.add(v1);
@@ -186,21 +193,6 @@ public class SteinerGraph {
 		return neighbours;
 	}
 
-	public String toString() {
-		String s = "";
-		for(SteinerGraphVertex v : vertices.values()) {
-			s += v.vertexInfo();
-			s += " Edges: [\n";
-			for(Integer i : v.neighbours) {
-				s += " w("+ v.id + "," + i + ")=" + edges.get(new SortedPair(i, v.id)).getWeight() + "\n";
-			}
-			s += " ]\n";
-			//			s += "\n Best star centered at " + v.id + " : " + bestStar(v.id).getFirst() + " " + bestStar(v.id).getSecond() + "\n\n";
-		}
-		return s;
-	}
-
-
 	/**
 	 * @return Sum of all weights of edges in the Steiner tree
 	 */
@@ -208,74 +200,6 @@ public class SteinerGraph {
 		return new ArrayList<>(steinerTreeEdges).stream().mapToInt(i->IDToEdge.get(i).getWeight()).sum();
 	}
 
-	/**
-	 * Performs pre-processing step
-	 */
-	public void preProcess() {
-		removeIsolated();
-		removeLeaves();
-		undoSubdivisions();
-	}
-
-	/**
-	 * Vertices with degree 2 may be seen as a subdivision of a single edge
-	 */
-	private void undoSubdivisions() {
-		Stack<Integer> stack = new Stack<Integer>();
-		stack.addAll(vertices.keySet());
-		while(!stack.isEmpty()) {
-			Integer middle = stack.pop();
-			if((vertices.get(middle).neighbours.size()!=2)||vertices.get(middle).isTerminal) continue;
-			Integer neighbourOne = vertices.get(new ArrayList<>(vertices.get(middle).neighbours).get(0)).id;
-			Integer neighbourTwo = vertices.get(new ArrayList<>(vertices.get(middle).neighbours).get(1)).id;
-			SteinerGraphEdge edgeOne = edges.get(new SortedPair(middle, neighbourOne));
-			SteinerGraphEdge edgeTwo = edges.get(new SortedPair(middle, neighbourTwo));
-			List<Integer> tempID = new ArrayList<>();
-			tempID.addAll(edgeOne.getID());
-			tempID.addAll(edgeTwo.getID());
-			addEdge(neighbourOne, neighbourTwo, edgeOne.getWeight() + edgeTwo.getWeight(), tempID);
-			removeVertex(middle);
-		}
-	}
-
-	/**
-	 * Removes all Steiner vertices that are isolated
-	 */
-    private void removeIsolated() {
-		List<Integer> steinerIsolated = new ArrayList<>();
-		for(SteinerGraphVertex v : vertices.values()) {
-			if (v.neighbours.size() == 0) {
-				if (!v.isTerminal) {
-					steinerIsolated.add(v.id);
-				}
-				else {
-					System.out.println("Terminal number " + (v.id+1) + " is isolated");
-					System.out.println("Problem is infeasible");
-					System.exit(0);
-				}
-			}
-		}
-		for(Integer i : steinerIsolated) {
-			removeVertex(i);
-		}
-	}
-
-	/**
-	 * Removes all Steiner vertices that are leaves
-	 */
-    private void removeLeaves() {
-		Stack<Integer> stack = new Stack<Integer>();
-		stack.addAll(vertices.keySet());
-		while(!stack.isEmpty()) {
-			Integer leaf = stack.pop();
-			if((vertices.get(leaf).neighbours.size()!=1)||vertices.get(leaf).isTerminal) continue;
-			Integer neighbour = vertices.get(new ArrayList<>(vertices.get(leaf).neighbours).get(0)).id;
-			removeEdge(leaf, neighbour);
-			vertices.remove(leaf);
-			stack.remove(neighbour);
-			stack.add(neighbour);
-		}
-	}
 
 	public List<Integer> getSteinerTreeEdges(){
 		List<Integer> ste = new ArrayList<Integer>(steinerTreeEdges);

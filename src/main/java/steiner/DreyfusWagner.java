@@ -10,15 +10,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+/**
+ * Implementation of FPT algorithm solving Steiner Tree problem by Dreyfus, Wagner '71
+ */
 public class DreyfusWagner {
-	
-	private SteinerGraph optimalTree;
+
 	private List<Integer> steinerEdges;
 	private int optimalTreeWeight;
 	
 	/**
 	 * Computes the exact Steiner tree using the Dreyfus-Wagner algorithm
-	 * @return exact weight of optimum Steiner tree
+	 * @param steinerGraph instance to be solved
 	 */
 	public void solve(SteinerGraph steinerGraph) {
 
@@ -158,7 +160,7 @@ public class DreyfusWagner {
 				parents.add(cache[current.getSecondParentRow()][current.getParentColumn()]);				
 			}
 		}
-		steinerEdges = new ArrayList<Integer>(edgeIDs);
+		steinerEdges = new ArrayList<>(edgeIDs);
 		Collections.sort(steinerEdges);
 	}
 	
@@ -185,7 +187,7 @@ public class DreyfusWagner {
 	private List<Set<Integer>> powerSet(Set<Integer> set) {
 	    List<Set<Integer>> powSet = new ArrayList<Set<Integer>>();
 	    if (set.isEmpty()) {
-	    	powSet.add(new HashSet<Integer>());
+	    	powSet.add(new HashSet<>());
 	        return powSet;
 	    }
 	    List<Integer> list = new ArrayList<Integer>(set);

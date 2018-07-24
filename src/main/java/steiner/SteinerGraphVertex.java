@@ -31,13 +31,4 @@ public class SteinerGraphVertex {
 		}
 		isTerminal = parent.isTerminal;
 	}
-
-	public String vertexInfo() {
-		String s = "----------";
-		if (isTerminal) s += " TERMINAL " + id + " --------";
-		else s += " steiner.SteinerGraphVertex " + id + " ----------";
-		s += "\n Neighbours: " + neighbours;
-		s += "\n Terminal neighbours: " + terminalneighbours + "\n";
-		return s;
-	}
 }

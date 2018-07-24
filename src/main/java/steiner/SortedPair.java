@@ -45,11 +45,6 @@ public class SortedPair {
         return false;
     }
 
-    public String toString()
-    {
-        return "[" + first + " "  + second + "]";
-    }
-
     public Integer getFirst() {
         return first;
     }
