@@ -30,13 +30,13 @@ List of parameters:
 `-slow` - use slower, but possibly more accurate reduction method
 
 #### Examples:
-1. **`java -jar steiner-tree-pas.jar -in instances\instance001.gr -ui input`**
+1. **`java -jar steiner-tree-pas.jar -in instances/instance001.gr -ui input`**
  * Display instance001.gr in the ui
 
-2. **`java -jar steiner-tree-pas.jar -in instances\instance001.gr -ui output -a 10`**
+2. **`java -jar steiner-tree-pas.jar -in instances/instance001.gr -ui output -a 10`**
  * Compute optimum and display Steiner tree in the ui
 
-3. **`java -jar steiner-tree-pas.jar -in instances\instance019.gr -c -long -out`**
+3. **`java -jar steiner-tree-pas.jar -in instances/instance019.gr -c -long -out`**
  * Compute exhaustively the best feasible solution for `instance019.gr` with detailed standard output and keep writing the Steiner tree into `instance019-tree.gr`
 
 
