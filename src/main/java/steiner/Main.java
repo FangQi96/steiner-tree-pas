@@ -478,7 +478,58 @@ public class Main {
 	}
 
 	private static void display(SteinerGraph displayGraph, List<Integer> exactEdges, List<Integer> approxEdges){
-		String styleSheet = readFile("src/styleSheet.css");
+		String styleSheet = "graph {\n" +
+				"\t fill-color: white;\n" +
+				"}\n" +
+				"node {\n" +
+				"     fill-color: black;\n" +
+				"     size-mode: dyn-size;\n" +
+				"     size: 5px;\n" +
+				"\t stroke-mode: plain;\n" +
+				"\t stroke-color: white;\n" +
+				"\t stroke-width: 2px;\n" +
+				"}\n" +
+				"node.terminal {\n" +
+				"\t fill-color: white;\n" +
+				"     shape: box;\n" +
+				"\t size: 10px, 10px;\n" +
+				"\t stroke-mode: plain;\n" +
+				"\t stroke-color: black;\n" +
+				"\t stroke-width: 3px;\n" +
+				"\t z-index: 5;\n" +
+				"}\n" +
+				"node.steiner {\n" +
+				"\t shape: diamond;\n" +
+				"\t size: 8px;\n" +
+				"\t fill-color: blue;\n" +
+				"\t z-index: 5;\n" +
+				"}\n" +
+				"edge {\n" +
+				"\t text-background-mode: plain;\n" +
+				"\t text-padding: 1px;\n" +
+				"\t text-alignment: along;\n" +
+				"\t fill-color: #AAA;\n" +
+				"\t text-visibility-mode: under-zoom;\n" +
+				"\t text-visibility: 1;\n" +
+				"\t text-color: #999;\n" +
+				"}\n" +
+				"edge.approxEdge {\n" +
+				"\t text-color: black;\n" +
+				"\t shape: blob;\n" +
+				"     fill-color: red;\n" +
+				"     size: 5px;\n" +
+				"\t text-style: bold;\n" +
+				"\t z-index: 4;\n" +
+				"}\n" +
+				"edge.exactEdge {\n" +
+				"\t text-color: black;\n" +
+				"\t shape: blob;\n" +
+				"     fill-color: darkgreen;\n" +
+				"     size: 5px;\n" +
+				"\t text-style: bold;\n" +
+				"\t z-index: 4;\n" +
+				"}\n" +
+				" ";
 		Graph graph = new SingleGraph("Steiner Tree Problem");
 		graph.setStrict(false);
 		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
