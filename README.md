@@ -1,10 +1,8 @@
-# steiner-tree-pas
-Steiner tree parameterized approximation scheme based on https://arxiv.org/abs/1710.00668
+## Introduction
+This repository contains an implementation of a Parameterized Approximation Scheme for the Steiner tree problem for weighted undirected graphs based on https://arxiv.org/abs/1710.00668.
 
-###Introduction
-This repository contains an implementation of a Parameterized Approximation Scheme for the Steiner tree problem for weighted undirected graphs.
+### Downloads
 
-###Downloads
 Download sample inputs [here](https://drive.google.com/open?id=1v4qmUbjYRZlq5e6-uLp6RkYJWwRRAbjw) and a pre-packaged jar file [here](https://drive.google.com/open?id=1WI0nSj5byFnlDzi068Oas869XAngCIcP).
 
 ### Usage
@@ -31,14 +29,14 @@ List of parameters:
 
 `-slow` - use slower, but possibly more accurate reduction method
 
-######Examples:
-1. `java -jar steiner-tree-pas.jar -in instances\instance001.gr -ui input`
+#### Examples:
+1. **`java -jar steiner-tree-pas.jar -in instances\instance001.gr -ui input`**
  * Display instance001.gr in the ui
 
-2. `java -jar steiner-tree-pas.jar -in instances\instance001.gr -ui output -a 10`
+2. **`java -jar steiner-tree-pas.jar -in instances\instance001.gr -ui output -a 10`**
  * Compute optimum and display Steiner tree in the ui
 
-3. `java -jar steiner-tree-pas.jar -in instances\instance019.gr -c -long -out`
+3. **`java -jar steiner-tree-pas.jar -in instances\instance019.gr -c -long -out`**
  * Compute exhaustively the best feasible solution for `instance019.gr` with detailed standard output and keep writing the Steiner tree into `instance019-tree.gr`
 
 
