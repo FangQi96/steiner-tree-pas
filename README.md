@@ -1,5 +1,5 @@
 ## Introduction
-This repository contains an implementation of a Parameterized Approximation Scheme (PAS) for the Steiner tree problem for integer edge-weighted undirected graphs. The work is based on the recent paper [*Parameterized Approximation Schemes for Steiner Trees with Small Number of Steiner Vertices*](https://arxiv.org/abs/1710.00668.) by *Pavel Dvořák, Andreas Emil Feldmann, Dušan Knop, Tomáš Masařík, Tomáš Toufar and Pavel Veselý*
+This repository contains an implementation of a Parameterized Approximation Scheme (PAS) for the Steiner tree problem for integer edge-weighted undirected graphs. The work is based on the recent paper [*Parameterized Approximation Schemes for Steiner Trees with Small Number of Steiner Vertices*](https://arxiv.org/abs/1710.00668) by *Pavel Dvořák, Andreas Emil Feldmann, Dušan Knop, Tomáš Masařík, Tomáš Toufar and Pavel Veselý*
 
 ### Downloads
 
