@@ -4,6 +4,7 @@ This repository contains an implementation of a Parameterized Approximation Sche
 ### Downloads
 
 Download sample inputs [here](https://drive.google.com/open?id=1v4qmUbjYRZlq5e6-uLp6RkYJWwRRAbjw) and a pre-packaged jar file [here](https://drive.google.com/open?id=1WGDzzpDvyD-5UVhOykd7FwjyWoQfImuf).
+For a description of the implementation download the reference manual [here](https://github.com/maoxc/steiner-tree-pas/raw/master/manual.pdf).
 
 ### Usage
 Run executable jar with the following java command:
