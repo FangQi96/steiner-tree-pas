@@ -355,7 +355,7 @@ public class Main {
 											}
 											catch (NumberFormatException nfe){
 												System.out.println("Invalid argument \"" + line[i] + "\" to option \"" + line[i-1] + "\"");
-												System.out.println("Argument must be an integer1");
+												System.out.println("Argument must be an integer");
 											}
 										}
 									}
@@ -374,7 +374,7 @@ public class Main {
 											}
 											catch (NumberFormatException nfe){
 												System.out.println("Invalid argument \"" + line[i] + "\" to option \"" + line[i-1] + "\"");
-												System.out.println("Argument must be an integer2");
+												System.out.println("Argument must be an integer");
 											}
 										}
 									}
