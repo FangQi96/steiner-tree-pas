@@ -3,7 +3,7 @@ This repository contains an implementation of a Parameterized Approximation Sche
 
 ### Downloads
 
-Download sample inputs [here](https://drive.google.com/open?id=1SO_QH6iGrTr4fRpahlJeXEzAYn0t5pyZ) and a pre-packaged jar file [here](https://drive.google.com/open?id=1WGDzzpDvyD-5UVhOykd7FwjyWoQfImuf).
+Download sample inputs [here](https://drive.google.com/open?id=1SO_QH6iGrTr4fRpahlJeXEzAYn0t5pyZ) and a pre-packaged jar file [here](https://drive.google.com/open?id=1SO_QH6iGrTr4fRpahlJeXEzAYn0t5pyZ).
 For a description of the implementation download the reference manual [here](https://github.com/maoxc/steiner-tree-pas/raw/master/manual.pdf).
 
 ### Usage
