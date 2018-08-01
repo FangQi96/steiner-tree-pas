@@ -39,89 +39,123 @@ public class Main {
 		Boolean slowKernel = false;
 
 		for(int i = 0; i < args.length; i++){
-			try {
-				switch (args[i]) {
-					case ("-d"):
-					case ("-display"):
-                    case ("-ui"):
-                    case ("-gui"):
-						i++;
-						if (i < args.length) {
-							switch (args[i]) {
-								case ("i"):
-                                case ("in"):
-								case ("input"):
-									displayInput = true;
-									break;
-								case ("o"):
-                                case ("out"):
-								case ("output"):
-									displayOutput = true;
-									break;
-								default:
-									i--;
-							}
+			switch (args[i]) {
+				case ("-d"):
+				case ("-display"):
+				case ("-ui"):
+				case ("-gui"):
+					i++;
+					if (i < args.length) {
+						switch (args[i]) {
+							case ("i"):
+							case ("in"):
+							case ("input"):
+								displayInput = true;
+								break;
+							case ("o"):
+							case ("out"):
+							case ("output"):
+								displayOutput = true;
+								break;
+							default:
+								i--;
+								break;
 						}
-						break;
-					case ("-i"):
-					case ("-in"):
-					case ("-input"):
-						i++;
-						if (i < args.length) {
-							if (args[i].substring(args[i].lastIndexOf('.')).equals(".gr")) {
-								inputPath = args[i];
-							} else i--;
-						}
-						break;
-					case ("-o"):
-					case ("-out"):
-					case ("-output"):
-                        out = true;
-						break;
-					case ("-silent"):
-						silent = true;
-						break;
-                    case ("-l"):
-                    case ("-long"):
-                        longOut = true;
-                        break;
-					case ("-c"):
-					case ("-cont"):
-					case ("-continuous"):
-						continuous = true;
-						break;
-					case ("-slow"):
-					case ("-slowkernel"):
-						slowKernel = true;
-						break;
-					case ("-a"):
-					case ("-accuracy"):
-						i++;
-						if (i < args.length) {
+					}
+					break;
+				case ("-i"):
+				case ("-in"):
+				case ("-input"):
+					i++;
+					if (i < args.length) {
+						if (args[i].substring(args[i].lastIndexOf('.')).equals(".gr")) {
+							inputPath = args[i];
+						} else i--;
+					}
+					break;
+				case ("-o"):
+				case ("-out"):
+				case ("-output"):
+					out = true;
+					break;
+				case ("-silent"):
+					silent = true;
+					break;
+				case ("-l"):
+				case ("-long"):
+					longOut = true;
+					break;
+				case ("-c"):
+				case ("-cont"):
+				case ("-continuous"):
+					continuous = true;
+					break;
+				case ("-slow"):
+				case ("-slowkernel"):
+					slowKernel = true;
+					break;
+				case ("-a"):
+				case ("-accuracy"):
+					i++;
+					if (i < args.length) {
+						try {
 							accuracy = Integer.parseInt(args[i]);
 						}
-						break;
-					case ("-s"):
-					case ("-sv"):
-					case ("-steiner"):
-					case ("-steinervertex"):
-						i++;
-						if (i < args.length) {
+						catch (NumberFormatException e){
+							try {
+								Long.parseLong(args[i]);
+								accuracy = 10;
+							}
+							catch (NumberFormatException nfe){
+								System.out.println("Invalid argument \"" + args[i] + "\" to option \"" + args[i-1] + "\"");
+								System.out.println("Accuracy should be an integer [0..10]");
+							}
+						}
+					}
+					break;
+				case ("-s"):
+				case ("-sv"):
+				case ("-steiner"):
+				case ("-steinervertex"):
+					i++;
+					if (i < args.length) {
+						try {
 							sCutOff = Integer.parseInt(args[i]);
 						}
-						break;
-					case ("-t"):
-					case ("-terminal"):
-						i++;
-						if (i < args.length) {
+						catch (NumberFormatException e){
+							try {
+								Long.parseLong(args[i]);
+								sCutOff = Integer.MAX_VALUE-1;
+							}
+							catch (NumberFormatException nfe){
+								System.out.println("Invalid argument \"" + args[i] + "\" to option \"" + args[i-1] + "\"");
+								System.out.println("Argument must be an integer");
+							}
+						}
+					}
+					break;
+				case ("-t"):
+				case ("-terminal"):
+					i++;
+					if (i < args.length) {
+						try {
 							tCutOff = Integer.parseInt(args[i]);
 						}
-						break;
-				}
-			}
-			catch (NumberFormatException e) {
-				e.printStackTrace();
-				System.exit(-1);
+						catch(NumberFormatException e){
+							try {
+								Long.parseLong(args[i]);
+								tCutOff = Integer.MAX_VALUE-1;
+							}
+							catch (NumberFormatException nfe){
+								System.out.println("Invalid argument \"" + args[i] + "\" to option \"" + args[i-1] + "\"");
+								System.out.println("Argument must be an integer");
+							}
+						}
+					}
+					break;
+				default:
+					System.out.println("Ignoring unknown parameter \"" + args[i] + "\"");
+					break;
 			}
 		}
 
@@ -250,26 +284,24 @@ public class Main {
 
 				Map<Integer, Integer> tCutoffToSave = new HashMap<>();
 				Map<Integer, Integer> sCutoffToSave = new HashMap<>();
-				String[] line = new String[0];
 				BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 				while ((selectedIndex == Integer.MAX_VALUE) && !continuous) {
+					for (int i = 0; i < saves.size(); i++) {
+						SteinerGraph save = saves.get(i);
+						tCutoffToSave.put(save.terminals.size(), i);
+						sCutoffToSave.put(save.vertices.size() - save.terminals.size() + preProcessSteinerDifference, i);
+					}
 					if ((accuracy == null) && (sCutOff == null) && (tCutOff == null)) {
-
-						List<Integer> tCutOffList = new ArrayList<>();
-						List<Integer> sCutOffList = new ArrayList<>();
-						for (int i = 0; i < saves.size(); i++) {
-							SteinerGraph save = saves.get(i);
-							tCutOffList.add(save.terminals.size());
-							tCutoffToSave.put(save.terminals.size(), i);
-
-							sCutOffList.add(save.vertices.size() - save.terminals.size() + preProcessSteinerDifference);
-							sCutoffToSave.put(save.vertices.size() - save.terminals.size() + preProcessSteinerDifference, i);
-						}
 						if (!silent) {
-							System.out.println("Terminal cut-off points: " + tCutOffList);
-							System.out.println("Steiner vertex cut-off points: " + sCutOffList);
+							List<Integer> tcop = new ArrayList<>(tCutoffToSave.keySet());
+							tcop.sort(Comparator.reverseOrder());
+							System.out.println("Terminal cut-off points: " + tcop);
+							List<Integer> scop = new ArrayList<>(sCutoffToSave.keySet());
+							scop.sort(Comparator.reverseOrder());
+							System.out.println("Steiner vertex cut-off points: " + scop);
 						}
+						String[] line = new String[0];
 						while (line.length == 0) {
 							System.out.println("[-t|-terminal cutOff] " +
 									"[-s|-steinervertex cutOff] " +
@@ -281,42 +313,76 @@ public class Main {
 								e.printStackTrace();
 							}
 						}
-						try {
-							for (int i = 0; i < line.length; i++) {
-								switch (line[i]) {
-									case ("-c"):
-									case ("-cont"):
-									case ("-continuous"):
-										continuous = true;
-										break;
-									case ("-a"):
-									case ("-accuracy"):
-										i++;
-										if (i < line.length) {
+						for (int i = 0; i < line.length; i++) {
+							switch (line[i]) {
+								case ("-c"):
+								case ("-cont"):
+								case ("-continuous"):
+									continuous = true;
+									break;
+								case ("-a"):
+								case ("-accuracy"):
+									i++;
+									if (i < line.length) {
+										try {
 											accuracy = Integer.parseInt(line[i]);
 										}
-										break;
-									case ("-s"):
-									case ("-sv"):
-									case ("-steiner"):
-									case ("-steinervertex"):
-										i++;
-										if (i < line.length) {
+										catch (NumberFormatException e){
+											try {
+												Long.parseLong(line[i]);
+												accuracy = 10;
+											}
+											catch (NumberFormatException nfe){
+												System.out.println("Invalid argument \"" + line[i] + "\" to option \"" + line[i-1] + "\"");
+												System.out.println("Accuracy should be an integer [0..10]");
+											}
+										}
+									}
+									break;
+								case ("-s"):
+								case ("-sv"):
+								case ("-steiner"):
+								case ("-steinervertex"):
+									i++;
+									if (i < line.length) {
+										try {
 											sCutOff = Integer.parseInt(line[i]);
 										}
-										break;
-									case ("-t"):
-									case ("-terminal"):
-										i++;
-										if (i < line.length) {
+										catch (NumberFormatException e){
+											try {
+												Long.parseLong(line[i]);
+												sCutOff = Integer.MAX_VALUE-1;
+											}
+											catch (NumberFormatException nfe){
+												System.out.println("Invalid argument \"" + line[i] + "\" to option \"" + line[i-1] + "\"");
+												System.out.println("Argument must be an integer1");
+											}
+										}
+									}
+									break;
+								case ("-t"):
+								case ("-terminal"):
+									i++;
+									if (i < line.length) {
+										try {
 											tCutOff = Integer.parseInt(line[i]);
 										}
-										break;
-								}
+										catch(NumberFormatException e){
+											try {
+												Long.parseLong(line[i]);
+												tCutOff = Integer.MAX_VALUE-1;
+											}
+											catch (NumberFormatException nfe){
+												System.out.println("Invalid argument \"" + line[i] + "\" to option \"" + line[i-1] + "\"");
+												System.out.println("Argument must be an integer2");
+											}
+										}
+									}
+									break;
+								default:
+									System.out.println("Ignoring unknown parameter \"" + line[i] + "\"");
+									break;
 							}
-						} catch (NumberFormatException e) {
-							e.printStackTrace();
-							System.exit(-1);
 						}
 					}
 					if (accuracy != null) {
@@ -336,13 +402,22 @@ public class Main {
 						} else {
 							Integer closestSaveIndex = null;
 							Integer closestTerminalCount = Integer.MAX_VALUE;
+							Integer max = Integer.MIN_VALUE;
+							Integer maxIndex = Integer.MIN_VALUE;
 							for (Map.Entry<Integer, Integer> entry : tCutoffToSave.entrySet()) {
-								if ((entry.getKey() > tCutOff) && (entry.getKey() < closestTerminalCount)) {
-									closestTerminalCount = entry.getKey();
-									closestSaveIndex = entry.getValue();
+								if (entry.getKey() > max){
+									max = entry.getKey();
+									maxIndex = entry.getValue();
+								}
+								if (entry.getKey() > tCutOff) {
+									if (entry.getKey() < closestTerminalCount) {
+										closestTerminalCount = entry.getKey();
+										closestSaveIndex = entry.getValue();
+									}
 								}
 							}
-							selectedIndex = Math.min(closestSaveIndex, selectedIndex);
+							if (tCutOff >= max) selectedIndex = Math.min(maxIndex, selectedIndex);
+							else selectedIndex = Math.min(closestSaveIndex, selectedIndex);
 						}
 					}
 					if (sCutOff != null) {
@@ -351,13 +426,20 @@ public class Main {
 						} else {
 							Integer closestSaveIndex = null;
 							Integer closestSteinerVertexCount = Integer.MAX_VALUE;
+							Integer max = Integer.MIN_VALUE;
+							Integer maxIndex = Integer.MIN_VALUE;
 							for (Map.Entry<Integer, Integer> entry : sCutoffToSave.entrySet()) {
+								if (entry.getKey() > max){
+									max = entry.getKey();
+									maxIndex = entry.getValue();
+								}
 								if ((entry.getKey() > sCutOff) && (entry.getKey() < closestSteinerVertexCount)) {
 									closestSteinerVertexCount = entry.getKey();
 									closestSaveIndex = entry.getValue();
 								}
 							}
-							selectedIndex = Math.min(closestSaveIndex, selectedIndex);
+							if (sCutOff >= max) selectedIndex = Math.min(maxIndex, selectedIndex);
+							else selectedIndex = Math.min(closestSaveIndex, selectedIndex);
 						}
 					}
 				}
@@ -538,35 +620,35 @@ public class Main {
 		graph.addAttribute("ui.quality");
 
 		for(SteinerGraphVertex v : displayGraph.vertices.values()){
-			graph.addNode(Integer.toString(v.id+1));
+			graph.addNode(Integer.toString(v.id));
 			if (v.isTerminal) {
-				graph.getNode(Integer.toString(v.id+1)).setAttribute("ui.class", "terminal");
+				graph.getNode(Integer.toString(v.id)).setAttribute("ui.class", "terminal");
 			}
 		}
 		for(SteinerGraphEdge edge : displayGraph.edges.values()){
 			Integer id = edge.getID().get(0);
-			graph.addEdge(id.toString(), Integer.toString(edge.getStart()+1), Integer.toString(edge.getEnd()+1));
+			graph.addEdge(id.toString(), Integer.toString(edge.getStart()), Integer.toString(edge.getEnd()));
 			Edge e = graph.getEdge(id.toString());
 			e.addAttribute("ui.label", edge.getWeight());
 			if (exactEdges.contains(id)){
 				e.setAttribute("ui.class", "exactEdge");
 				if (!displayGraph.vertices.get(edge.getStart()).isTerminal){
-					graph.getNode(Integer.toString(edge.getStart()+1))
+					graph.getNode(Integer.toString(edge.getStart()))
 							.setAttribute("ui.class", "steiner");
 				}
 				if (!displayGraph.vertices.get(edge.getEnd()).isTerminal){
-					graph.getNode(Integer.toString(edge.getEnd()+1))
+					graph.getNode(Integer.toString(edge.getEnd()))
 							.setAttribute("ui.class", "steiner");
 				}
 			}
 			else if (approxEdges.contains(id)){
 				e.setAttribute("ui.class", "approxEdge");
 				if (!displayGraph.vertices.get(edge.getStart()).isTerminal){
-					graph.getNode(Integer.toString(edge.getStart()+1))
+					graph.getNode(Integer.toString(edge.getStart()))
 							.setAttribute("ui.class", "steiner");
 				}
 				if (!displayGraph.vertices.get(edge.getEnd()).isTerminal){
-					graph.getNode(Integer.toString(edge.getEnd()+1))
+					graph.getNode(Integer.toString(edge.getEnd()))
 							.setAttribute("ui.class", "steiner");
 				}
 			}

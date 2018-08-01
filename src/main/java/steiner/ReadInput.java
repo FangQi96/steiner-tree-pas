@@ -52,11 +52,11 @@ public class ReadInput {
 		}
 		catch(FileNotFoundException e) {
 			System.out.println("File not found: '" + path + "'");
-			e.printStackTrace();
+			System.exit(0);
 		}
 		catch(IOException e) {
 			System.out.println("Failed to read file: '" + path + "'");
-			e.printStackTrace();
+			System.exit(0);
 		}
 	}
 
