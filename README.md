@@ -18,8 +18,6 @@ List of parameters:
 
 `-long` - more detailed standard output
 
-`-s p` - run FPT algorithm on at least `p` Steiner vertices
-
 `-t r` - run FPT algorithm on at least `r` Terminals
 
 `-a [0..10]` - instead of using options`-s` or `-t` we may specify a number between 0 and 10 as a rough indication of the accuracy with which we want to run the approximation scheme ( 0 being the least and 10 the most accurate)
